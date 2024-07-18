@@ -2,6 +2,7 @@ package org.emerald.apifirst.apifirstserver.boostrap;
 
 import lombok.RequiredArgsConstructor;
 import org.emerald.apifirst.apifirstserver.repositories.CustomerRepository;
+import org.emerald.apifirst.apifirstserver.repositories.OrderRepository;
 import org.emerald.apifirst.apifirstserver.repositories.ProductRepository;
 import org.emerald.apifirst.model.Address;
 import org.emerald.apifirst.model.Category;
@@ -9,6 +10,10 @@ import org.emerald.apifirst.model.Customer;
 import org.emerald.apifirst.model.Dimensions;
 import org.emerald.apifirst.model.Image;
 import org.emerald.apifirst.model.Name;
+import org.emerald.apifirst.model.Order;
+import org.emerald.apifirst.model.OrderCustomer;
+import org.emerald.apifirst.model.OrderLine;
+import org.emerald.apifirst.model.OrderProduct;
 import org.emerald.apifirst.model.PaymentMethod;
 import org.emerald.apifirst.model.Product;
 import org.springframework.boot.CommandLineRunner;
@@ -22,6 +27,7 @@ public class DataLoader implements CommandLineRunner {
 
     private final CustomerRepository customerRepository;
     private final ProductRepository productRepository;
+    private final OrderRepository orderRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -76,8 +82,8 @@ public class DataLoader implements CommandLineRunner {
                         .build()))
                 .build();
 
-        customerRepository.save(customer1);
-        customerRepository.save(customer2);
+        Customer savedCustomer1 = customerRepository.save(customer1);
+        Customer savedCustomer2 = customerRepository.save(customer2);
 
         Product product1 = Product.builder()
                 .description("Product 1")
@@ -117,7 +123,71 @@ public class DataLoader implements CommandLineRunner {
                         .build()))
                 .build();
 
-        productRepository.save(product1);
-        productRepository.save(product2);
+        Product savedProduct1 = productRepository.save(product1);
+        Product savedProduct2 = productRepository.save(product2);
+
+        Order order1 = Order.builder()
+                .customer(OrderCustomer.builder()
+                        .id(savedCustomer1.getId())
+                        .name(savedCustomer1.getName())
+                        .billToAddress(savedCustomer1.getBillToAddress())
+                        .shipToAddress(savedCustomer1.getShipToAddress())
+                        .phone(savedCustomer1.getPhone())
+                        .selectedPaymentMethod(savedCustomer1.getPaymentMethods().get(0))
+                        .build())
+                .orderStatus(Order.OrderStatusEnum.NEW)
+                .shipmentInfo("shipment info")
+                .orderLines(List.of(OrderLine.builder()
+                                .product(OrderProduct.builder()
+                                        .id(savedProduct1.getId())
+                                        .description(product1.getDescription())
+                                        .price(product1.getPrice())
+                                        .build())
+                                .orderQuantity(1)
+                                .shipQuantity(1)
+                                .build(),
+                        OrderLine.builder()
+                                .product(OrderProduct.builder()
+                                        .id(savedProduct2.getId())
+                                        .description(product2.getDescription())
+                                        .price(product1.getPrice())
+                                        .build())
+                                .orderQuantity(1)
+                                .shipQuantity(1)
+                                .build()))
+                .build();
+
+        Order order2 = Order.builder()
+                .customer(OrderCustomer.builder()
+                        .id(savedCustomer2.getId())
+                        .billToAddress(savedCustomer2.getBillToAddress())
+                        .shipToAddress(savedCustomer2.getShipToAddress())
+                        .phone(savedCustomer2.getPhone())
+                        .selectedPaymentMethod(savedCustomer2.getPaymentMethods().get(0))
+                        .build())
+                .orderStatus(Order.OrderStatusEnum.NEW)
+                .shipmentInfo("shipment info #2")
+                .orderLines(List.of(OrderLine.builder()
+                                .product(OrderProduct.builder()
+                                        .id(savedProduct1.getId())
+                                        .description(product1.getDescription())
+                                        .price(product1.getPrice())
+                                        .build())
+                                .orderQuantity(1)
+                                .shipQuantity(1)
+                                .build(),
+                        OrderLine.builder()
+                                .product(OrderProduct.builder()
+                                        .id(savedProduct2.getId())
+                                        .description(product2.getDescription())
+                                        .price(product1.getPrice())
+                                        .build())
+                                .orderQuantity(1)
+                                .shipQuantity(1)
+                                .build()))
+                .build();
+
+        orderRepository.save(order1);
+        orderRepository.save(order2);
     }
 }
