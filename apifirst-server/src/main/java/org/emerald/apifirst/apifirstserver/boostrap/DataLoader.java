@@ -19,6 +19,7 @@ public class DataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+
         Address address1 = Address.builder()
                 .addressLine1("1234 W Some Street")
                 .city("Some City")
@@ -28,28 +29,30 @@ public class DataLoader implements CommandLineRunner {
 
         Customer customer1 = Customer.builder()
                 .name(Name.builder()
-                        .firstName("John")
-                        .lastName("Thompson")
+                        .firstName("Emerald")
+                        .lastName("Flint")
                         .build())
                 .billToAddress(address1)
                 .shipToAddress(address1)
                 .email("john@springframework.guru")
                 .phone("800-555-1212")
                 .paymentMethods(List.of(PaymentMethod.builder()
+                        .displayName("My Card")
                         .cardNumber(12341234)
                         .expiryMonth(12)
                         .expiryYear(26)
+                        .cvv(123)
                         .build()))
                 .build();
 
-        var address2 = Address.builder()
+        Address address2 = Address.builder()
                 .addressLine1("1234 W Some Street")
                 .city("Some City")
                 .state("FL")
                 .zip("33701")
                 .build();
 
-        var customer2 = Customer.builder()
+        Customer customer2 = Customer.builder()
                 .name(Name.builder()
                         .firstName("Jim")
                         .lastName("Smith")
@@ -59,9 +62,11 @@ public class DataLoader implements CommandLineRunner {
                 .email("jim@springframework.guru")
                 .phone("800-555-1212")
                 .paymentMethods(List.of(PaymentMethod.builder()
+                        .displayName("My Other Card")
                         .cardNumber(1234888)
                         .expiryMonth(12)
                         .expiryYear(26)
+                        .cvv(456)
                         .build()))
                 .build();
 
