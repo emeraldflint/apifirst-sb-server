@@ -83,8 +83,7 @@
                                 <useJakartaEe>true</useJakartaEe>
                                 <useBeanValidation>true</useBeanValidation>
                                 <openApiNullable>false</openApiNullable>
-                                <addtionalModelTypeAnnotations>@lombok.Builder @lombok.AllArgsConstructor
-                                </addtionalModelTypeAnnotations>
+                                <additionalModelTypeAnnotations>@lombok.Builder @lombok.AllArgsConstructor</additionalModelTypeAnnotations>
                             </configOptions>
                         </configuration>
                     </execution>
