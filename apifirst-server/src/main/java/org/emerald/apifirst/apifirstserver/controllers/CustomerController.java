@@ -5,10 +5,12 @@ import org.emerald.apifirst.apifirstserver.services.CustomerService;
 import org.emerald.apifirst.model.Customer;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.emerald.apifirst.apifirstserver.controllers.CustomerController.BASE_URL;
 
@@ -24,5 +26,10 @@ public class CustomerController {
     @GetMapping
     public ResponseEntity<List<Customer>> listCustomers() {
         return ResponseEntity.ok(customerService.listCustomers());
+    }
+
+    @GetMapping("/{customerId}")
+    public ResponseEntity<Customer> getCustomerById(@PathVariable("customerId") UUID customerId) {
+        return ResponseEntity.ok(customerService.getCustomerById(customerId));
     }
 }
