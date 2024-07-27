@@ -21,4 +21,15 @@ public class CustomerControllerTest extends BaseTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()", greaterThan(0)));
     }
+
+
+    @DisplayName("Get by id")
+    @Test
+    void testGetCustomerById() throws Exception {
+        mockMvc.perform(get(CustomerController.BASE_URL + "/{customerId}", testCustomer.getId())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(testCustomer.getId().toString()));
+    }
+
 }

@@ -3,6 +3,7 @@ package org.emerald.apifirst.apifirstserver.controllers;
 import org.emerald.apifirst.apifirstserver.repositories.CustomerRepository;
 import org.emerald.apifirst.apifirstserver.repositories.OrderRepository;
 import org.emerald.apifirst.apifirstserver.repositories.ProductRepository;
+import org.emerald.apifirst.model.Customer;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
@@ -21,9 +22,13 @@ public class BaseTest {
 
     public MockMvc mockMvc;
 
+    Customer testCustomer;
+
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(wac)
                 .build();
+
+        testCustomer = customerRepository.findAll().iterator().next();
     }
 }
