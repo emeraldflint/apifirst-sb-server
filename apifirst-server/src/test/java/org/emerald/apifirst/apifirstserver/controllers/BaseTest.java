@@ -1,5 +1,6 @@
 package org.emerald.apifirst.apifirstserver.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.emerald.apifirst.apifirstserver.repositories.CustomerRepository;
 import org.emerald.apifirst.apifirstserver.repositories.OrderRepository;
 import org.emerald.apifirst.apifirstserver.repositories.ProductRepository;
@@ -21,6 +22,8 @@ public class BaseTest {
     OrderRepository orderRepository;
     @Autowired
     WebApplicationContext wac;
+    @Autowired
+    ObjectMapper objectMapper;
 
     public MockMvc mockMvc;
 
