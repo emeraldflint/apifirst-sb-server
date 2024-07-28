@@ -6,9 +6,12 @@ import org.emerald.apifirst.model.Customer;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,5 +34,11 @@ public class CustomerController {
     @GetMapping("/{customerId}")
     public ResponseEntity<Customer> getCustomerById(@PathVariable("customerId") UUID customerId) {
         return ResponseEntity.ok(customerService.getCustomerById(customerId));
+    }
+
+    @PostMapping
+    ResponseEntity<Void> saveNewCustomer(@RequestBody Customer customer){
+        var savedCustomer = customerService.saveNewCustomer(customer);
+        return ResponseEntity.created(URI.create(BASE_URL + "/" + savedCustomer.getId())).build();
     }
 }
