@@ -6,9 +6,13 @@ import org.emerald.apifirst.model.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,12 +28,25 @@ public class OrderController {
     private final OrderService orderService;
 
     @GetMapping
-    public ResponseEntity<List<Order>> listOrders(){
+    public ResponseEntity<List<Order>> listOrders() {
         return ResponseEntity.ok(orderService.listOrders());
     }
 
     @GetMapping("/{orderId}")
     public ResponseEntity<Order> getProductById(@PathVariable("orderId") UUID orderId) {
         return ResponseEntity.ok(orderService.getOrderById(orderId));
+    }
+
+    @PostMapping
+    public ResponseEntity<Void> saveNewOrder(@RequestBody Order order) {
+        var savedOrder = orderService.saveNewOrder(order);
+
+        var uriComponent = UriComponentsBuilder
+                .fromPath(BASE_URL + "/{orderId}")
+                .buildAndExpand(savedOrder.getId());
+
+        return ResponseEntity
+                .created(URI.create(uriComponent.getPath()))
+                .build();
     }
 }

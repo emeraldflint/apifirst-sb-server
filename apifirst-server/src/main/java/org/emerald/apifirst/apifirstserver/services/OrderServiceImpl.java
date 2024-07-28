@@ -25,4 +25,9 @@ public class OrderServiceImpl implements OrderService {
     public Order getOrderById(UUID orderId) {
         return orderRepository.findById(orderId).orElseThrow();
     }
+
+    @Override
+    public Order saveNewOrder(Order order) {
+        return orderRepository.save(order);
+    }
 }
