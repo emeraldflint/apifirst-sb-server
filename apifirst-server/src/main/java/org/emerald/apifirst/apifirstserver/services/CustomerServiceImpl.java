@@ -2,7 +2,8 @@ package org.emerald.apifirst.apifirstserver.services;
 
 import lombok.RequiredArgsConstructor;
 import org.emerald.apifirst.apifirstserver.repositories.CustomerRepository;
-import org.emerald.apifirst.model.Customer;
+import org.emerald.apifirst.model.CategoryDto;
+import org.emerald.apifirst.model.CustomerDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,17 +17,17 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
 
     @Override
-    public List<Customer> listCustomers() {
+    public List<CustomerDto> listCustomers() {
         return StreamSupport.stream(customerRepository.findAll().spliterator(), false).toList();
     }
 
     @Override
-    public Customer getCustomerById(UUID customerId) {
+    public CustomerDto getCustomerById(UUID customerId) {
         return customerRepository.findById(customerId).orElseThrow();
     }
 
     @Override
-    public Customer saveNewCustomer(Customer customer) {
+    public CustomerDto saveNewCustomer(CustomerDto customer) {
         return customerRepository.save(customer);
     }
 }

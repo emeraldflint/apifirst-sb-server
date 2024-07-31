@@ -1,14 +1,14 @@
 package org.emerald.apifirst.apifirstserver.services;
 
-import org.emerald.apifirst.model.Customer;
+import org.emerald.apifirst.model.CustomerDto;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface CustomerService {
-    List<Customer> listCustomers();
+    List<CustomerDto> listCustomers();
 
-    Customer getCustomerById(UUID customerId);
+    CustomerDto getCustomerById(UUID customerId);
 
-    Customer saveNewCustomer(Customer customer);
+    CustomerDto saveNewCustomer(CustomerDto customer);
 }

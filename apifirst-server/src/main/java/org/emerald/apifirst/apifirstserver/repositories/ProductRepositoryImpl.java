@@ -1,6 +1,9 @@
 package org.emerald.apifirst.apifirstserver.repositories;
 
-import org.emerald.apifirst.model.*;
+import org.emerald.apifirst.model.CategoryDto;
+import org.emerald.apifirst.model.DimensionsDto;
+import org.emerald.apifirst.model.ImageDto;
+import org.emerald.apifirst.model.ProductDto;
 import org.springframework.stereotype.Repository;
 
 import java.time.OffsetDateTime;
@@ -14,12 +17,12 @@ import java.util.stream.StreamSupport;
 @Repository
 public class ProductRepositoryImpl implements ProductRepository {
 
-    private final Map<UUID, Product> entityMap = new HashMap<>();
+    private final Map<UUID, ProductDto> entityMap = new HashMap<>();
 
     @Override
-    public <S extends Product> S save(S entity) {
+    public <S extends ProductDto> S save(S entity) {
 
-        Product.ProductBuilder builder = Product.builder();
+        ProductDto.ProductDtoBuilder builder = ProductDto.builder();
 
         builder.id(UUID.randomUUID())
                 .description(entity.getDescription())
@@ -31,7 +34,7 @@ public class ProductRepositoryImpl implements ProductRepository {
         if (entity.getCategories() != null) {
             builder.categories(entity.getCategories().stream()
                     .map(category -> {
-                        return Category.builder()
+                        return CategoryDto.builder()
                                 .id(UUID.randomUUID())
                                 .category(category.getCategory())
                                 .description(category.getDescription())
@@ -45,7 +48,7 @@ public class ProductRepositoryImpl implements ProductRepository {
         if (entity.getImages() != null) {
             builder.images(entity.getImages().stream()
                     .map(image -> {
-                        return Image.builder()
+                        return ImageDto.builder()
                                 .id(UUID.randomUUID())
                                 .url(image.getUrl())
                                 .altText(image.getAltText())
@@ -57,28 +60,28 @@ public class ProductRepositoryImpl implements ProductRepository {
         }
 
         if (entity.getDimensions() != null) {
-            builder.dimensions(Dimensions.builder()
+            builder.dimensions(DimensionsDto.builder()
                     .length(entity.getDimensions().getLength())
                     .width(entity.getDimensions().getWidth())
                     .height(entity.getDimensions().getHeight())
                     .build());
         }
 
-        Product product = builder.build();
+        ProductDto product = builder.build();
 
         entityMap.put(product.getId(), product);
         return (S) product;
     }
 
     @Override
-    public <S extends Product> Iterable<S> saveAll(Iterable<S> entities) {
+    public <S extends ProductDto> Iterable<S> saveAll(Iterable<S> entities) {
         return StreamSupport.stream(entities.spliterator(), false)
                 .map(this::save)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<Product> findById(UUID uuid) {
+    public Optional<ProductDto> findById(UUID uuid) {
         return Optional.of(entityMap.get(uuid));
     }
 
@@ -88,12 +91,12 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public Iterable<Product> findAll() {
+    public Iterable<ProductDto> findAll() {
         return entityMap.values();
     }
 
     @Override
-    public Iterable<Product> findAllById(Iterable<UUID> uuids) {
+    public Iterable<ProductDto> findAllById(Iterable<UUID> uuids) {
         return StreamSupport.stream(uuids.spliterator(), false)
                 .map(this::findById)
                 .filter(Optional::isPresent)
@@ -112,7 +115,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public void delete(Product entity) {
+    public void delete(ProductDto entity) {
         entityMap.remove(entity.getId());
     }
 
@@ -122,7 +125,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public void deleteAll(Iterable<? extends Product> entities) {
+    public void deleteAll(Iterable<? extends ProductDto> entities) {
         entities.forEach(this::delete);
     }
 

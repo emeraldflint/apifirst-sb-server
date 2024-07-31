@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.emerald.apifirst.apifirstserver.repositories.CustomerRepository;
 import org.emerald.apifirst.apifirstserver.repositories.OrderRepository;
 import org.emerald.apifirst.apifirstserver.repositories.ProductRepository;
-import org.emerald.apifirst.model.Customer;
-import org.emerald.apifirst.model.Order;
-import org.emerald.apifirst.model.Product;
+import org.emerald.apifirst.model.CustomerDto;
+import org.emerald.apifirst.model.OrderDto;
+import org.emerald.apifirst.model.ProductDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
@@ -27,9 +27,9 @@ public class BaseTest {
 
     public MockMvc mockMvc;
 
-    Customer testCustomer;
-    Product testProduct;
-    Order testOrder;
+    CustomerDto testCustomer;
+    ProductDto testProduct;
+    OrderDto testOrder;
 
     @BeforeEach
     void setUp() {

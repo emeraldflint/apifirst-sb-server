@@ -2,7 +2,7 @@ package org.emerald.apifirst.apifirstserver.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.emerald.apifirst.apifirstserver.services.ProductService;
-import org.emerald.apifirst.model.Product;
+import org.emerald.apifirst.model.ProductDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,17 +27,17 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public ResponseEntity<List<Product>> listProducts() {
+    public ResponseEntity<List<ProductDto>> listProducts() {
         return ResponseEntity.ok(productService.listProducts());
     }
 
     @GetMapping("/{productId}")
-    public ResponseEntity<Product> getProductById(@PathVariable("productId") UUID productId) {
+    public ResponseEntity<ProductDto> getProductById(@PathVariable("productId") UUID productId) {
         return ResponseEntity.ok(productService.getProductById(productId));
     }
 
     @PostMapping
-    public ResponseEntity<Void> saveNewProduct(@RequestBody Product product) {
+    public ResponseEntity<Void> saveNewProduct(@RequestBody ProductDto product) {
         var createdProduct = productService.saveNewProduct(product);
         var uriComponents = UriComponentsBuilder.fromPath(BASE_URL + "/{product_id}")
                 .buildAndExpand(createdProduct.getId());

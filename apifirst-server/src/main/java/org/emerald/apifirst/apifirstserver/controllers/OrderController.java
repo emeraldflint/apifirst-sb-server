@@ -2,7 +2,7 @@ package org.emerald.apifirst.apifirstserver.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.emerald.apifirst.apifirstserver.services.OrderService;
-import org.emerald.apifirst.model.Order;
+import org.emerald.apifirst.model.OrderDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,17 +28,17 @@ public class OrderController {
     private final OrderService orderService;
 
     @GetMapping
-    public ResponseEntity<List<Order>> listOrders() {
+    public ResponseEntity<List<OrderDto>> listOrders() {
         return ResponseEntity.ok(orderService.listOrders());
     }
 
     @GetMapping("/{orderId}")
-    public ResponseEntity<Order> getProductById(@PathVariable("orderId") UUID orderId) {
+    public ResponseEntity<OrderDto> getProductById(@PathVariable("orderId") UUID orderId) {
         return ResponseEntity.ok(orderService.getOrderById(orderId));
     }
 
     @PostMapping
-    public ResponseEntity<Void> saveNewOrder(@RequestBody Order order) {
+    public ResponseEntity<Void> saveNewOrder(@RequestBody OrderDto order) {
         var savedOrder = orderService.saveNewOrder(order);
 
         var uriComponent = UriComponentsBuilder

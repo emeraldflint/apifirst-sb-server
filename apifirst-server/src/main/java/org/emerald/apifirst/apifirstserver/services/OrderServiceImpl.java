@@ -2,7 +2,7 @@ package org.emerald.apifirst.apifirstserver.services;
 
 import lombok.RequiredArgsConstructor;
 import org.emerald.apifirst.apifirstserver.repositories.OrderRepository;
-import org.emerald.apifirst.model.Order;
+import org.emerald.apifirst.model.OrderDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,18 +16,18 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
 
     @Override
-    public List<Order> listOrders() {
+    public List<OrderDto> listOrders() {
         return StreamSupport.stream(orderRepository.findAll().spliterator(), false)
                 .toList();
     }
 
     @Override
-    public Order getOrderById(UUID orderId) {
+    public OrderDto getOrderById(UUID orderId) {
         return orderRepository.findById(orderId).orElseThrow();
     }
 
     @Override
-    public Order saveNewOrder(Order order) {
+    public OrderDto saveNewOrder(OrderDto order) {
         return orderRepository.save(order);
     }
 }

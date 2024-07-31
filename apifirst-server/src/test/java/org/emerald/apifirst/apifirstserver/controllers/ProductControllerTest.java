@@ -1,9 +1,9 @@
 package org.emerald.apifirst.apifirstserver.controllers;
 
-import org.emerald.apifirst.model.Category;
-import org.emerald.apifirst.model.Image;
-import org.emerald.apifirst.model.Product;
-import org.emerald.apifirst.model.Dimensions;
+import org.emerald.apifirst.model.CategoryDto;
+import org.emerald.apifirst.model.DimensionsDto;
+import org.emerald.apifirst.model.ImageDto;
+import org.emerald.apifirst.model.ProductDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -43,19 +43,19 @@ public class ProductControllerTest extends BaseTest {
     @DisplayName("Create product")
     @Test
     void testCreateProduct() throws Exception {
-        Product newProduct = Product.builder()
+        ProductDto newProduct = ProductDto.builder()
                 .description("New Product")
                 .cost("5.00")
                 .price("8.95")
-                .categories(Arrays.asList(Category.builder()
+                .categories(Arrays.asList(CategoryDto.builder()
                         .category("New Category")
                         .description("New Category Description")
                         .build()))
-                .images(Arrays.asList(Image.builder()
+                .images(Arrays.asList(ImageDto.builder()
                         .url("http://example.com/image.jpg")
                         .altText("Image Alt Text")
                         .build()))
-                .dimensions(Dimensions.builder()
+                .dimensions(DimensionsDto.builder()
                         .length(10)
                         .width(10)
                         .height(10)

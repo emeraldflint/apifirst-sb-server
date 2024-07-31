@@ -78,6 +78,7 @@
                             <generateAliasAsModel>false</generateAliasAsModel>
                             <generateApis>false</generateApis>
                             <modelPackage>org.emerald.apifirst.model</modelPackage>
+                            <modelNameSuffix>Dto</modelNameSuffix>
                             <configOptions>
                                 <sourceFolder>src/gen/java/main</sourceFolder>
                                 <useJakartaEe>true</useJakartaEe>

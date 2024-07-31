@@ -2,7 +2,7 @@ package org.emerald.apifirst.apifirstserver.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.emerald.apifirst.apifirstserver.services.CustomerService;
-import org.emerald.apifirst.model.Customer;
+import org.emerald.apifirst.model.CustomerDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,17 +27,17 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @GetMapping
-    public ResponseEntity<List<Customer>> listCustomers() {
+    public ResponseEntity<List<CustomerDto>> listCustomers() {
         return ResponseEntity.ok(customerService.listCustomers());
     }
 
     @GetMapping("/{customerId}")
-    public ResponseEntity<Customer> getCustomerById(@PathVariable("customerId") UUID customerId) {
+    public ResponseEntity<CustomerDto> getCustomerById(@PathVariable("customerId") UUID customerId) {
         return ResponseEntity.ok(customerService.getCustomerById(customerId));
     }
 
     @PostMapping
-    ResponseEntity<Void> saveNewCustomer(@RequestBody Customer customer){
+    ResponseEntity<Void> saveNewCustomer(@RequestBody CustomerDto customer){
         var savedCustomer = customerService.saveNewCustomer(customer);
         return ResponseEntity.created(URI.create(BASE_URL + "/" + savedCustomer.getId())).build();
     }

@@ -1,8 +1,8 @@
 package org.emerald.apifirst.apifirstserver.controllers;
 
-import org.emerald.apifirst.model.Address;
-import org.emerald.apifirst.model.Customer;
-import org.emerald.apifirst.model.Name;
+import org.emerald.apifirst.model.AddressDto;
+import org.emerald.apifirst.model.CustomerDto;
+import org.emerald.apifirst.model.NameDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -40,20 +40,20 @@ public class CustomerControllerTest extends BaseTest {
     @DisplayName("Test Create Customer")
     @Test
     void testCreateCustomer() throws Exception {
-        var customer = Customer.builder()
-                .name(Name.builder()
+        var customer = CustomerDto.builder()
+                .name(NameDto.builder()
                         .lastName("Doe")
                         .firstName("John")
                         .build())
                 .phone("555-555-5555")
                 .email("john@example.com")
-                .shipToAddress(Address.builder()
+                .shipToAddress(AddressDto.builder()
                         .addressLine1("123 Main St")
                         .city("Denver")
                         .state("CO")
                         .zip("80216")
                         .build())
-                .billToAddress(Address.builder()
+                .billToAddress(AddressDto.builder()
                         .addressLine1("123 Main St")
                         .city("Denver")
                         .state("CO")

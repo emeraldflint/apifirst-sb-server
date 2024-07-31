@@ -1,7 +1,7 @@
 package org.emerald.apifirst.apifirstserver.repositories;
 
-import org.emerald.apifirst.model.Order;
-import org.emerald.apifirst.model.OrderLine;
+import org.emerald.apifirst.model.OrderDto;
+import org.emerald.apifirst.model.OrderLineDto;
 import org.springframework.stereotype.Repository;
 
 import java.time.OffsetDateTime;
@@ -15,11 +15,11 @@ import java.util.stream.StreamSupport;
 @Repository
 public class OrderRepositoryImpl implements OrderRepository {
 
-    private final Map<UUID, Order> entityMap = new HashMap<>();
+    private final Map<UUID, OrderDto> entityMap = new HashMap<>();
 
     @Override
-    public <S extends Order> S save(S entity) {
-        Order.OrderBuilder builder = Order.builder();
+    public <S extends OrderDto> S save(S entity) {
+        OrderDto.OrderDtoBuilder builder = OrderDto.builder();
 
         builder.id(UUID.randomUUID())
                 .orderStatus(entity.getOrderStatus())
@@ -33,7 +33,7 @@ public class OrderRepositoryImpl implements OrderRepository {
 
         if (entity.getOrderLines() != null){
             builder.orderLines(entity.getOrderLines().stream()
-                    .map(orderLine -> OrderLine.builder()
+                    .map(orderLine -> OrderLineDto.builder()
                             .id(UUID.randomUUID())
                             .product(orderLine.getProduct()) //might cause NPE
                             .orderQuantity(orderLine.getOrderQuantity())
@@ -44,20 +44,20 @@ public class OrderRepositoryImpl implements OrderRepository {
                     .collect(Collectors.toList()));
         }
 
-        Order savedEntity = builder.build();
+        OrderDto savedEntity = builder.build();
         entityMap.put(savedEntity.getId(), savedEntity);
         return (S) savedEntity;
     }
 
     @Override
-    public <S extends Order> Iterable<S> saveAll(Iterable<S> entities) {
+    public <S extends OrderDto> Iterable<S> saveAll(Iterable<S> entities) {
         return StreamSupport.stream(entities.spliterator(), false)
                 .map(this::save)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<Order> findById(UUID uuid) {
+    public Optional<OrderDto> findById(UUID uuid) {
         return Optional.of(entityMap.get(uuid));
     }
 
@@ -67,12 +67,12 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
-    public Iterable<Order> findAll() {
+    public Iterable<OrderDto> findAll() {
         return entityMap.values();
     }
 
     @Override
-    public Iterable<Order> findAllById(Iterable<UUID> uuids) {
+    public Iterable<OrderDto> findAllById(Iterable<UUID> uuids) {
         return StreamSupport.stream(uuids.spliterator(), false)
                 .map(this::findById)
                 .filter(Optional::isPresent)
@@ -91,7 +91,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
-    public void delete(Order entity) {
+    public void delete(OrderDto entity) {
         entityMap.remove(entity.getId());
     }
 
@@ -101,7 +101,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
-    public void deleteAll(Iterable<? extends Order> entities) {
+    public void deleteAll(Iterable<? extends OrderDto> entities) {
         entities.forEach(this::delete);
     }
 

@@ -1,7 +1,7 @@
 package org.emerald.apifirst.apifirstserver.controllers;
 
-import org.emerald.apifirst.model.OrderCreate;
-import org.emerald.apifirst.model.OrderLineCreate;
+import org.emerald.apifirst.model.OrderCreateDto;
+import org.emerald.apifirst.model.OrderLineCreateDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -40,10 +40,10 @@ public class OrderControllerTest extends BaseTest {
     @DisplayName("Create order")
     @Test
     void testCreateOrder() throws Exception {
-        var orderCreate = OrderCreate.builder()
+        var orderCreate = OrderCreateDto.builder()
                 .customerId(testCustomer.getId())
                 .selectPaymentMethodId(testCustomer.getPaymentMethods().get(0).getId())
-                .orderLines(Arrays.asList(OrderLineCreate.builder()
+                .orderLines(Arrays.asList(OrderLineCreateDto.builder()
                         .productId(testProduct.getId())
                         .orderQuantity(1)
                         .build()))
