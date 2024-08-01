@@ -1,12 +1,11 @@
 package org.emerald.apifirst.apifirstserver.domain;
 
-import jakarta.persistence.Embedded;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -25,26 +24,16 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Product {
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @JdbcTypeCode(SqlTypes.CHAR)
+    @Column(length = 36, columnDefinition = "char(36)", updatable = false, nullable = false)
     private UUID id;
-
+    @ManyToMany(mappedBy = "categories")
+    private List<Product> products;
+    private String category;
     private String description;
-    @Embedded
-    private Dimensions dimensions;
-
-    @ManyToMany
-    private List<Category> categories;
-
-    @OneToMany(mappedBy = "product")
-    private List<Image> images;
-
-    private String price;
-
-    private String cost;
-
     @CreationTimestamp
     private OffsetDateTime dateCreated;
     @UpdateTimestamp
