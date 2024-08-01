@@ -12,7 +12,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
 
 import java.time.OffsetDateTime;
@@ -40,6 +42,8 @@ public class Customer {
     private String phone;
     @OneToMany(mappedBy = "customer")
     private List<PaymentMethod> paymentMethods;
+    @CreationTimestamp
     private OffsetDateTime dateCreated;
+    @UpdateTimestamp
     private OffsetDateTime dateUpdated;
 }

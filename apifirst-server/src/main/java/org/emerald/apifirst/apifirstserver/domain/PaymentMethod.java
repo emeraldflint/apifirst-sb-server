@@ -10,7 +10,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
 
 import java.time.OffsetDateTime;
@@ -34,6 +36,8 @@ public class PaymentMethod {
     private Integer expiryMonth;
     private Integer expiryYear;
     private Integer cvv;
+    @CreationTimestamp
     private OffsetDateTime dateCreated;
+    @UpdateTimestamp
     private OffsetDateTime dateUpdated;
 }
