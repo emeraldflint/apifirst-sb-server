@@ -5,9 +5,9 @@ import org.emerald.apifirst.model.OrderLineCreateDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
-import java.util.Collections;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
@@ -18,13 +18,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-public class OrderControllerTest extends BaseTest {
+class OrderControllerTest extends BaseTest {
+
     @Test
+    @Transactional
     void testCreateOrder() throws Exception {
         OrderCreateDto orderCreate = OrderCreateDto.builder()
                 .customerId(testCustomer.getId())
                 .selectPaymentMethodId(testCustomer.getPaymentMethods().get(0).getId())
-                .orderLines(Collections.singletonList(OrderLineCreateDto.builder()
+                .orderLines(Arrays.asList(OrderLineCreateDto.builder()
                         .productId(testProduct.getId())
                         .orderQuantity(1)
                         .build()))
