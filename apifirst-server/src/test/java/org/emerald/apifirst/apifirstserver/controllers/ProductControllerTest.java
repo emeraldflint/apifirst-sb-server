@@ -7,7 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
@@ -18,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-public class ProductControllerTest extends BaseTest {
+class ProductControllerTest extends BaseTest {
 
     @Test
     void testCreateProduct() throws Exception {
@@ -26,8 +27,8 @@ public class ProductControllerTest extends BaseTest {
                 .description("New Product")
                 .cost("5.00")
                 .price("8.95")
-                .categories(Arrays.asList("NEW_CATRGORY"))
-                .images(Arrays.asList(ImageDto.builder()
+                .categories(List.of("ELECTRONICS"))
+                .images(Collections.singletonList(ImageDto.builder()
                         .url("http://example.com/image.jpg")
                         .altText("Image Alt Text")
                         .build()))

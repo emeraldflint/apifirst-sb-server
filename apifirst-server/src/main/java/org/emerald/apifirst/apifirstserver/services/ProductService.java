@@ -1,5 +1,6 @@
 package org.emerald.apifirst.apifirstserver.services;
 
+import org.emerald.apifirst.model.ProductCreateDto;
 import org.emerald.apifirst.model.ProductDto;
 
 import java.util.List;
@@ -10,5 +11,5 @@ public interface ProductService {
 
     ProductDto getProductById(UUID productId);
 
-    ProductDto saveNewProduct(ProductDto product);
+    ProductDto saveNewProduct(ProductCreateDto product);
 }
