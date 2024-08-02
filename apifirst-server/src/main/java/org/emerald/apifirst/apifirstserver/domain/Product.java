@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -24,6 +25,7 @@ import java.util.UUID;
 @Setter
 @RequiredArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 public class Product {
     @Id
@@ -33,7 +35,7 @@ public class Product {
 
     private String description;
     @Embedded
-    private Dimensions dimensions;
+    private Dimension dimension;
 
     @ManyToMany
     private List<Category> categories;

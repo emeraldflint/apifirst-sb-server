@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
@@ -17,17 +16,20 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDto> listOrders() {
-        return StreamSupport.stream(orderRepository.findAll().spliterator(), false)
-                .toList();
+       /* return StreamSupport.stream(orderRepository.findAll().spliterator(), false)
+                .toList();*/
+        return null;
     }
 
     @Override
     public OrderDto getOrderById(UUID orderId) {
-        return orderRepository.findById(orderId).orElseThrow();
+        //return orderRepository.findById(orderId).orElseThrow();
+        return null;
     }
 
     @Override
     public OrderDto saveNewOrder(OrderDto order) {
-        return orderRepository.save(order);
+        //return orderRepository.save(order);
+        return null;
     }
 }

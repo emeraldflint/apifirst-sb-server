@@ -1,6 +1,7 @@
 package org.emerald.apifirst.apifirstserver.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -9,6 +10,7 @@ import lombok.Setter;
 @Setter
 @RequiredArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Name {
     private String prefix;
     private String firstName;

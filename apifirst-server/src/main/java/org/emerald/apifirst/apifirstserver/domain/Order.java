@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,6 +31,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Entity
+@Table(name = "order_header") // order is reserved word in SQL
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -51,6 +53,6 @@ public class Order {
     @CreationTimestamp
     private OffsetDateTime dateCreated;
     @UpdateTimestamp
-    private OffsetDateTime dateUpdate;
+    private OffsetDateTime dateUpdated;
 }
 

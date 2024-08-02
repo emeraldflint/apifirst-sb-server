@@ -1,6 +1,7 @@
 package org.emerald.apifirst.apifirstserver.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -8,8 +9,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @RequiredArgsConstructor
+@Builder
 @AllArgsConstructor
-public class Dimensions {
+public class Dimension {
     private Integer length;
     private Integer width;
     private Integer height;

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
@@ -17,17 +16,20 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> listProducts() {
-        return StreamSupport.stream(productRepository.findAll().spliterator(), false)
-                .toList();
+       /* return StreamSupport.stream(productRepository.findAll().spliterator(), false)
+                .toList();*/
+        return null;
     }
 
     @Override
     public ProductDto getProductById(UUID productId) {
-        return productRepository.findById(productId).orElseThrow();
+        //return productRepository.findById(productId).orElseThrow();
+        return null;
     }
 
     @Override
     public ProductDto saveNewProduct(ProductDto product) {
-        return productRepository.save(product);
+        //return productRepository.save(product);
+        return null;
     }
 }
