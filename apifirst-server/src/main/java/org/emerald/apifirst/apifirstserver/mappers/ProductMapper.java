@@ -19,7 +19,6 @@ public interface ProductMapper {
     @Mapping(target = "dateCreated", ignore = true)
     @Mapping(target = "dateUpdated", ignore = true)
     @Mapping(target = "categories", ignore = true)
-    @Mapping(target = "dimension", source = "dimensions")
     Product dtoToProduct(ProductCreateDto productCreateDto);
 
     ProductDto productToDto(Product product);

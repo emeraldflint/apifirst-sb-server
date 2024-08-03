@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class OrderMapperDecorator implements OrderMapper{
+public abstract class OrderMapperDecorator implements OrderMapper {
 
     @Autowired
     @Qualifier("delegate")
@@ -57,7 +57,9 @@ public abstract class OrderMapperDecorator implements OrderMapper{
                             .build());
                 });
 
-        return builder.orderLines(orderLines).build();
+        Order order = builder.orderLines(orderLines).build();
+        orderLines.forEach(orderLine -> orderLine.setOrder(order));
+        return order;
     }
 
     @Override
