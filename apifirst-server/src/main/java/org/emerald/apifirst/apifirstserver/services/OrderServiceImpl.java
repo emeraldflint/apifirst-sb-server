@@ -20,7 +20,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto saveNewOrder(OrderCreateDto orderCreate) {
-        Order savedOrder = orderRepository.saveAndFlush(orderMapper.orderCreateDtoToOrder(orderCreate));
+        Order savedOrder = orderRepository.saveAndFlush(orderMapper.dtoToOrder(orderCreate));
         return orderMapper.orderToDto(savedOrder);
     }
 

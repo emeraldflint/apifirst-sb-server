@@ -1,5 +1,6 @@
 package org.emerald.apifirst.apifirstserver.domain;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -38,20 +39,26 @@ public class Order {
     @JdbcTypeCode(SqlTypes.CHAR)
     @Column(length = 36, columnDefinition = "char(36)", updatable = false, nullable = false)
     private UUID id;
+
     @ManyToOne
     private Customer customer;
+
+    @ManyToOne
+    private PaymentMethod selectedPaymentMethod;
 
     @Builder.Default
     @Enumerated(EnumType.STRING)
     private OrderStatusEnum orderStatus = OrderStatusEnum.NEW;
+
     private String shipmentInfo;
 
-    @OneToMany(mappedBy = "order")
     @Builder.Default
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderLine> orderLines = new ArrayList<>();
 
     @CreationTimestamp
     private OffsetDateTime dateCreated;
+
     @UpdateTimestamp
     private OffsetDateTime dateUpdated;
 }
