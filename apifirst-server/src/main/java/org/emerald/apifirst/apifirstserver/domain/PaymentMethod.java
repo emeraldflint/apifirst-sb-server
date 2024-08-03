@@ -6,6 +6,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,15 +33,29 @@ public class PaymentMethod {
     @JdbcTypeCode(SqlTypes.CHAR)
     @Column(length = 36, columnDefinition = "char(36)", updatable = false, nullable = false)
     private UUID id;
+
     @ManyToOne
     private Customer customer;
+
+    @NotNull
+    @Size(min = 2, max = 100)
     private String displayName;
+
+    @NotNull
     private Integer cardNumber;
+
+    @NotNull
     private Integer expiryMonth;
+
+    @NotNull
     private Integer expiryYear;
+
+    @NotNull
     private Integer cvv;
+
     @CreationTimestamp
     private OffsetDateTime dateCreated;
+
     @UpdateTimestamp
     private OffsetDateTime dateUpdated;
 }

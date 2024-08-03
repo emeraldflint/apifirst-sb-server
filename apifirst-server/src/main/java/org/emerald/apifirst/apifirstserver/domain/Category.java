@@ -6,6 +6,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,13 +34,21 @@ public class Category {
     @JdbcTypeCode(SqlTypes.CHAR)
     @Column(length = 36, columnDefinition = "char(36)", updatable = false, nullable = false)
     private UUID id;
+
+    @NotNull
+    @Size(min=3,max=25)
+    private String category;
+
+    @NotNull
+    @Size(min=3,max=25)
+    private String description;
+
+    @Size(min=3,max=25)
+    private String categoryCode;
+
     @ManyToMany(mappedBy = "categories")
     private List<Product> products;
-    private String category;
-    private String description;
-    private String categoryCode;
-    @CreationTimestamp
+
     private OffsetDateTime dateCreated;
-    @UpdateTimestamp
     private OffsetDateTime dateUpdated;
 }
