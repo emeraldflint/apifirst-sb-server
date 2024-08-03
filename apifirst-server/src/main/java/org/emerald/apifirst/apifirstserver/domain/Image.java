@@ -6,6 +6,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,12 +33,20 @@ public class Image {
     @JdbcTypeCode(SqlTypes.CHAR)
     @Column(length = 36, columnDefinition = "char(36)", updatable = false, nullable = false)
     private UUID id;
+
+    @NotNull
+    @Size(min=5,max=500)
+    private String url;
+
+    @Size(min=3,max=255)
+    private String altText;
+
     @ManyToOne
     private Product product;
-    private String url;
-    private String altText;
+
     @CreationTimestamp
     private OffsetDateTime dateCreated;
+
     @UpdateTimestamp
     private OffsetDateTime dateUpdated;
 }

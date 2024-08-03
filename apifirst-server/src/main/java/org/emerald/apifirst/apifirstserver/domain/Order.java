@@ -11,6 +11,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,18 +42,22 @@ public class Order {
     @Column(length = 36, columnDefinition = "char(36)", updatable = false, nullable = false)
     private UUID id;
 
+    @NotNull
     @ManyToOne
     private Customer customer;
 
     @ManyToOne
     private PaymentMethod selectedPaymentMethod;
 
+    @NotNull
     @Builder.Default
     @Enumerated(EnumType.STRING)
     private OrderStatusEnum orderStatus = OrderStatusEnum.NEW;
 
+    @Size(min=1,max=255)
     private String shipmentInfo;
 
+    @NotNull
     @Builder.Default
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderLine> orderLines = new ArrayList<>();
