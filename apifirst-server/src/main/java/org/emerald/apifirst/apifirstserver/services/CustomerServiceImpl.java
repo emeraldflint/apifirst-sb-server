@@ -1,10 +1,12 @@
 package org.emerald.apifirst.apifirstserver.services;
 
 import lombok.RequiredArgsConstructor;
+import org.emerald.apifirst.apifirstserver.domain.Customer;
+import org.emerald.apifirst.apifirstserver.mappers.CustomerMapper;
 import org.emerald.apifirst.apifirstserver.repositories.CustomerRepository;
-import org.emerald.apifirst.model.CategoryDto;
 import org.emerald.apifirst.model.CustomerDto;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -15,19 +17,25 @@ import java.util.stream.StreamSupport;
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
+    private final CustomerMapper customerMapper;
 
     @Override
     public List<CustomerDto> listCustomers() {
-        return StreamSupport.stream(customerRepository.findAll().spliterator(), false).toList();
+        return StreamSupport.stream(customerRepository.findAll().spliterator(), false)
+                .map(customerMapper::customerToDto)
+                .toList();
     }
 
     @Override
     public CustomerDto getCustomerById(UUID customerId) {
-        return customerRepository.findById(customerId).orElseThrow();
+        return customerMapper.customerToDto(customerRepository.findById(customerId).orElseThrow());
     }
 
+    @Transactional
     @Override
     public CustomerDto saveNewCustomer(CustomerDto customer) {
-        return customerRepository.save(customer);
+        Customer savedCustomer = customerRepository.save(customerMapper.dtoToCustomer(customer));
+        customerRepository.flush();
+        return customerMapper.customerToDto(savedCustomer);
     }
 }

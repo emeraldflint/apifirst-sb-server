@@ -1,7 +1,9 @@
 package org.emerald.apifirst.apifirstserver.services;
 
 import lombok.RequiredArgsConstructor;
+import org.emerald.apifirst.apifirstserver.mappers.ProductMapper;
 import org.emerald.apifirst.apifirstserver.repositories.ProductRepository;
+import org.emerald.apifirst.model.ProductCreateDto;
 import org.emerald.apifirst.model.ProductDto;
 import org.springframework.stereotype.Service;
 
@@ -14,20 +16,22 @@ import java.util.stream.StreamSupport;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
+    private final ProductMapper productMapper;
 
     @Override
     public List<ProductDto> listProducts() {
         return StreamSupport.stream(productRepository.findAll().spliterator(), false)
+                .map(productMapper::productToDto)
                 .toList();
     }
 
     @Override
     public ProductDto getProductById(UUID productId) {
-        return productRepository.findById(productId).orElseThrow();
+        return productMapper.productToDto(productRepository.findById(productId).orElseThrow());
     }
 
     @Override
-    public ProductDto saveNewProduct(ProductDto product) {
-        return productRepository.save(product);
+    public ProductDto saveNewProduct(ProductCreateDto product) {
+        return productMapper.productToDto(productRepository.save(productMapper.dtoToProduct(product)));
     }
 }

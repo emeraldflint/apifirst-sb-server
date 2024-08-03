@@ -1,5 +1,6 @@
 package org.emerald.apifirst.apifirstserver.services;
 
+import org.emerald.apifirst.model.OrderCreateDto;
 import org.emerald.apifirst.model.OrderDto;
 
 import java.util.List;
@@ -10,5 +11,5 @@ public interface OrderService {
 
     OrderDto getOrderById(UUID orderId);
 
-    OrderDto saveNewOrder(OrderDto order);
+    OrderDto saveNewOrder(OrderCreateDto order);
 }

@@ -1,9 +1,9 @@
 package org.emerald.apifirst.apifirstserver.repositories;
 
-import org.emerald.apifirst.model.OrderDto;
-import org.springframework.data.repository.CrudRepository;
+import org.emerald.apifirst.apifirstserver.domain.Order;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
 
-public interface OrderRepository extends CrudRepository<OrderDto, UUID> {
+public interface OrderRepository extends JpaRepository<Order, UUID> {
 }

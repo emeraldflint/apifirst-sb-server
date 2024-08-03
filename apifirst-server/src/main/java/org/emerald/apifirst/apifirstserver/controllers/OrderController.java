@@ -2,6 +2,7 @@ package org.emerald.apifirst.apifirstserver.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.emerald.apifirst.apifirstserver.services.OrderService;
+import org.emerald.apifirst.model.OrderCreateDto;
 import org.emerald.apifirst.model.OrderDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,7 +39,7 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> saveNewOrder(@RequestBody OrderDto order) {
+    public ResponseEntity<Void> saveNewOrder(@RequestBody OrderCreateDto order) {
         var savedOrder = orderService.saveNewOrder(order);
 
         var uriComponent = UriComponentsBuilder

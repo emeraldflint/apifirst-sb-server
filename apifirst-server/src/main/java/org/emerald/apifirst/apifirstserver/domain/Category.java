@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -23,6 +24,7 @@ import java.util.UUID;
 @Setter
 @RequiredArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 public class Category {
     @Id
@@ -34,6 +36,7 @@ public class Category {
     private List<Product> products;
     private String category;
     private String description;
+    private String categoryCode;
     @CreationTimestamp
     private OffsetDateTime dateCreated;
     @UpdateTimestamp

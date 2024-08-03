@@ -2,6 +2,7 @@ package org.emerald.apifirst.apifirstserver.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.emerald.apifirst.apifirstserver.services.ProductService;
+import org.emerald.apifirst.model.ProductCreateDto;
 import org.emerald.apifirst.model.ProductDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,7 +38,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> saveNewProduct(@RequestBody ProductDto product) {
+    public ResponseEntity<Void> saveNewProduct(@RequestBody ProductCreateDto product) {
         var createdProduct = productService.saveNewProduct(product);
         var uriComponents = UriComponentsBuilder.fromPath(BASE_URL + "/{product_id}")
                 .buildAndExpand(createdProduct.getId());

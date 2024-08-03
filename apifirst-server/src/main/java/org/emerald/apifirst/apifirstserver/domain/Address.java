@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -19,6 +20,7 @@ import java.util.UUID;
 @Setter
 @RequiredArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 public class Address {
     @Id
@@ -32,5 +34,5 @@ public class Address {
     private String state;
     private String zip;
     private OffsetDateTime dateCreated;
-    private OffsetDateTime dateUpdate;
+    private OffsetDateTime dateUpdated;
 }
