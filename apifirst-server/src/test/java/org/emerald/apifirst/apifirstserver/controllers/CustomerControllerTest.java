@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.UUID;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
@@ -138,6 +139,15 @@ public class CustomerControllerTest extends BaseTest {
                 .andExpect(status().isNoContent());
 
         assert customerRepository.findById(savedCustomer.getId()).isEmpty();
+    }
+
+    @DisplayName("Get by Id Not Found")
+    @Test
+    void testGetCustomerByIdNotFound() throws Exception {
+
+        mockMvc.perform(get(CustomerController.BASE_URL + "/{customerId}", UUID.randomUUID())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 
 }
