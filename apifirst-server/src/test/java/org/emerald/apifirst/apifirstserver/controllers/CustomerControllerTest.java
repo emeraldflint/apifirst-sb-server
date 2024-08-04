@@ -109,6 +109,7 @@ public class CustomerControllerTest extends BaseTest {
                         .build())
                 .paymentMethods(Collections.singletonList(CustomerPaymentMethodPatchDto.builder()
                         .id(customer.getPaymentMethods().get(0).getId())
+                        .displayName("NEW NAME")
                         .build()))
                 .build();
 
@@ -118,7 +119,8 @@ public class CustomerControllerTest extends BaseTest {
                         .content(objectMapper.writeValueAsString(customerPatch)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name.firstName", equalTo("Updated")))
-                .andExpect(jsonPath("$.name.lastName", equalTo("Updated2")));
+                .andExpect(jsonPath("$.name.lastName", equalTo("Updated2")))
+                .andExpect(jsonPath("$.paymentMethods[0].displayName", equalTo("NEW NAME")));
     }
 
 }
