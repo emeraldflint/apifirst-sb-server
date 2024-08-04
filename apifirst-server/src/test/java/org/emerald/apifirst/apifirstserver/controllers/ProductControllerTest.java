@@ -6,6 +6,7 @@ import org.emerald.apifirst.model.ProductCreateDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -14,6 +15,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -61,5 +63,19 @@ class ProductControllerTest extends BaseTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(testProduct.getId().toString())));
+    }
+
+    @Transactional
+    @Test
+    void testUpdateProduct() throws Exception {
+        var product = productRepository.findAll().iterator().next();
+        var productUpdateDto = productMapper.productToUpdateDto(product);
+        productUpdateDto.setDescription("Updated Description");
+
+        mockMvc.perform(put(ProductController.BASE_URL + "/{productId}", product.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(productUpdateDto)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.description", equalTo("Updated Description")));
     }
 }
