@@ -1,7 +1,10 @@
 package org.emerald.apifirst.apifirstserver.controllers;
 
+import org.emerald.apifirst.apifirstserver.domain.Customer;
 import org.emerald.apifirst.model.AddressDto;
 import org.emerald.apifirst.model.CustomerDto;
+import org.emerald.apifirst.model.CustomerPatchDto;
+import org.emerald.apifirst.model.CustomerPaymentMethodPatchDto;
 import org.emerald.apifirst.model.NameDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,9 +12,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
+
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -88,6 +94,31 @@ public class CustomerControllerTest extends BaseTest {
                 .andExpect(jsonPath("$.name.firstName", equalTo("Updated")))
                 .andExpect(jsonPath("$.name.lastName", equalTo("Updated2")))
                 .andExpect(jsonPath("$.paymentMethods[0].displayName", equalTo("NEW NAME")));
+    }
+
+    @Transactional
+    @DisplayName("Test Update Customer")
+    @Test
+    void testPatchCustomer() throws Exception {
+        Customer customer = customerRepository.findAll().iterator().next();
+
+        CustomerPatchDto customerPatch = CustomerPatchDto.builder()
+                .name(NameDto.builder()
+                        .firstName("Updated")
+                        .lastName("Updated2")
+                        .build())
+                .paymentMethods(Collections.singletonList(CustomerPaymentMethodPatchDto.builder()
+                        .id(customer.getPaymentMethods().get(0).getId())
+                        .build()))
+                .build();
+
+        mockMvc.perform(patch(CustomerController.BASE_URL + "/{customerId}", testCustomer.getId())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(customerPatch)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name.firstName", equalTo("Updated")))
+                .andExpect(jsonPath("$.name.lastName", equalTo("Updated2")));
     }
 
 }

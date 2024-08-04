@@ -3,8 +3,10 @@ package org.emerald.apifirst.apifirstserver.controllers;
 import lombok.RequiredArgsConstructor;
 import org.emerald.apifirst.apifirstserver.services.CustomerService;
 import org.emerald.apifirst.model.CustomerDto;
+import org.emerald.apifirst.model.CustomerPatchDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -47,6 +49,13 @@ public class CustomerController {
     ResponseEntity<CustomerDto> updateCustomer(@PathVariable("customerId") UUID customerId,
                                                @RequestBody CustomerDto customer){
         CustomerDto savedCustomer = customerService.updateCustomer(customerId, customer);
+        return ResponseEntity.ok(savedCustomer);
+    }
+
+    @PatchMapping("/{customerId}")
+    ResponseEntity<CustomerDto> patchCustomer(@PathVariable("customerId") UUID customerId,
+                                              @RequestBody CustomerPatchDto customer){
+        CustomerDto savedCustomer = customerService.patchCustomer(customerId, customer);
         return ResponseEntity.ok(savedCustomer);
     }
 }

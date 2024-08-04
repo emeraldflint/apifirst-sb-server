@@ -5,6 +5,7 @@ import org.emerald.apifirst.apifirstserver.domain.Customer;
 import org.emerald.apifirst.apifirstserver.mappers.CustomerMapper;
 import org.emerald.apifirst.apifirstserver.repositories.CustomerRepository;
 import org.emerald.apifirst.model.CustomerDto;
+import org.emerald.apifirst.model.CustomerPatchDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,5 +47,15 @@ public class CustomerServiceImpl implements CustomerService {
         customerMapper.updateCustomer(customer, existingCustomer);
 
         return customerMapper.customerToDto(customerRepository.save(existingCustomer));
+    }
+
+    @Transactional
+    @Override
+    public CustomerDto patchCustomer(UUID customerId, CustomerPatchDto customer) {
+        Customer existingCustomer = customerRepository.findById(customerId).orElseThrow();
+
+        customerMapper.patchCustomer(customer, existingCustomer);
+
+        return customerMapper.customerToDto(customerRepository.saveAndFlush(existingCustomer));
     }
 }
