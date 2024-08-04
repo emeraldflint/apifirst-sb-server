@@ -3,6 +3,7 @@ package org.emerald.apifirst.apifirstserver.services;
 import lombok.RequiredArgsConstructor;
 import org.emerald.apifirst.apifirstserver.domain.Product;
 import org.emerald.apifirst.apifirstserver.mappers.ProductMapper;
+import org.emerald.apifirst.apifirstserver.repositories.OrderRepository;
 import org.emerald.apifirst.apifirstserver.repositories.ProductRepository;
 import org.emerald.apifirst.model.ProductCreateDto;
 import org.emerald.apifirst.model.ProductDto;
@@ -20,6 +21,7 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
+    private final OrderRepository orderRepository;
 
     @Override
     public List<ProductDto> listProducts() {
@@ -55,7 +57,13 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteProduct(UUID productId) {
-        productRepository.findById(productId).ifPresentOrElse(productRepository::delete, () -> {
+        productRepository.findById(productId).ifPresentOrElse(customer ->
+        {
+            if (!orderRepository.findAllByOrderLines_Product(customer).isEmpty()) {
+                throw new ConflictException("Product is used in orders");
+            }
+            productRepository.delete(customer);
+        }, () -> {
             throw new NotFoundException("Product not found");
         });
     }
