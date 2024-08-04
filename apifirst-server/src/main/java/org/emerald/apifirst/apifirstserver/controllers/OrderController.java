@@ -4,9 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.emerald.apifirst.apifirstserver.services.OrderService;
 import org.emerald.apifirst.model.OrderCreateDto;
 import org.emerald.apifirst.model.OrderDto;
+import org.emerald.apifirst.model.OrderPatchDto;
 import org.emerald.apifirst.model.OrderUpdateDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -55,5 +57,12 @@ public class OrderController {
     public ResponseEntity<OrderDto> updateOrder(@PathVariable UUID orderId, @RequestBody OrderUpdateDto order) {
         var updatedProduct = orderService.updateOrder(orderId, order);
         return ResponseEntity.ok(updatedProduct);
+    }
+
+    @PatchMapping("/{orderId}")
+    public ResponseEntity<OrderDto> patchOrder(@PathVariable("orderId") UUID orderId,
+                                               @RequestBody OrderPatchDto orderPatchDto){
+        OrderDto savedOrder = orderService.patchOrder(orderId, orderPatchDto);
+        return ResponseEntity.ok(savedOrder);
     }
 }

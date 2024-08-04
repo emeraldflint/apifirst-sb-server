@@ -2,6 +2,7 @@ package org.emerald.apifirst.apifirstserver.services;
 
 import org.emerald.apifirst.model.ProductCreateDto;
 import org.emerald.apifirst.model.ProductDto;
+import org.emerald.apifirst.model.ProductPatchDto;
 import org.emerald.apifirst.model.ProductUpdateDto;
 
 import java.util.List;
@@ -15,4 +16,6 @@ public interface ProductService {
     ProductDto saveNewProduct(ProductCreateDto product);
 
     ProductDto updateProduct(UUID productId, ProductUpdateDto productUpdateDto);
+
+    ProductDto patchProduct(UUID productId, ProductPatchDto product);
 }

@@ -1,10 +1,12 @@
 package org.emerald.apifirst.apifirstserver.services;
 
 import lombok.RequiredArgsConstructor;
+import org.emerald.apifirst.apifirstserver.domain.Product;
 import org.emerald.apifirst.apifirstserver.mappers.ProductMapper;
 import org.emerald.apifirst.apifirstserver.repositories.ProductRepository;
 import org.emerald.apifirst.model.ProductCreateDto;
 import org.emerald.apifirst.model.ProductDto;
+import org.emerald.apifirst.model.ProductPatchDto;
 import org.emerald.apifirst.model.ProductUpdateDto;
 import org.springframework.stereotype.Service;
 
@@ -42,5 +44,12 @@ public class ProductServiceImpl implements ProductService {
         productMapper.updateProduct(productUpdateDto, product);
 
         return productMapper.productToDto(productRepository.save(product));
+    }
+
+    @Override
+    public ProductDto patchProduct(UUID productId, ProductPatchDto product) {
+        Product existingProduct = productRepository.findById(productId).orElseThrow();
+        productMapper.patchProduct(product, existingProduct);
+        return productMapper.productToDto(productRepository.save(existingProduct));
     }
 }

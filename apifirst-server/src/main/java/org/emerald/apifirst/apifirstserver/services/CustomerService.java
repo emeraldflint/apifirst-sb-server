@@ -1,6 +1,7 @@
 package org.emerald.apifirst.apifirstserver.services;
 
 import org.emerald.apifirst.model.CustomerDto;
+import org.emerald.apifirst.model.CustomerPatchDto;
 
 import java.util.List;
 import java.util.UUID;
@@ -13,4 +14,6 @@ public interface CustomerService {
     CustomerDto saveNewCustomer(CustomerDto customer);
 
     CustomerDto updateCustomer(UUID customerId, CustomerDto customer);
+
+    CustomerDto patchCustomer(UUID customerId, CustomerPatchDto customer);
 }
