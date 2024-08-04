@@ -5,12 +5,14 @@ import org.emerald.apifirst.model.OrderCreateDto;
 import org.emerald.apifirst.model.OrderLineCreateDto;
 import org.emerald.apifirst.model.OrderLinePatchDto;
 import org.emerald.apifirst.model.OrderPatchDto;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.UUID;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
@@ -114,6 +116,54 @@ class OrderControllerTest extends BaseTest {
                 .andExpect(status().isNoContent());
 
         assert orderRepository.findById(savedOrder.getId()).isEmpty();
+    }
+
+    @DisplayName("Get by Id Not Found")
+    @Test
+    void testGetOrderByIdNotFound() throws Exception {
+
+        mockMvc.perform(get(OrderController.BASE_URL + "/{orderId}", UUID.randomUUID())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @DisplayName("Update order by id not found")
+    @Test
+    @Transactional
+    void testUpdateOrderNotFound() throws Exception {
+
+        var order = orderRepository.findAll().get(0);
+
+        order.getOrderLines().get(0).setOrderQuantity(222);
+
+        var orderUpdate = orderMapper.orderToUpdateDto(order);
+
+        mockMvc.perform(put(OrderController.BASE_URL + "/{orderId}", UUID.randomUUID())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(orderUpdate))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @DisplayName("Patch order by id not found")
+    @Test
+    @Transactional
+    void testPatchOrderNotFound() throws Exception {
+
+        Order order = orderRepository.findAll().get(0);
+
+        OrderPatchDto orderPatch = OrderPatchDto.builder()
+                .orderLines(Collections.singletonList(OrderLinePatchDto.builder()
+                        .id(order.getOrderLines().get(0).getId())
+                        .orderQuantity(333)
+                        .build()))
+                .build();
+
+        mockMvc.perform(patch(OrderController.BASE_URL + "/{orderId}", UUID.randomUUID())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(orderPatch))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 
     private OrderCreateDto createNewOrderDto() {

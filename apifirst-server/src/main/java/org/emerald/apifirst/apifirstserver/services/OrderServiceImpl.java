@@ -37,12 +37,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto getOrderById(UUID orderId) {
-        return orderMapper.orderToDto(orderRepository.findById(orderId).orElseThrow());
+        return orderMapper.orderToDto(orderRepository.findById(orderId).orElseThrow(NotFoundException::new));
     }
 
     @Override
     public OrderDto updateOrder(UUID orderId, OrderUpdateDto order) {
-        var existingOrder = orderRepository.findById(orderId).orElseThrow();
+        var existingOrder = orderRepository.findById(orderId).orElseThrow(NotFoundException::new);
         orderMapper.updateOrder(order, existingOrder);
 
         return orderMapper.orderToDto(orderRepository.save(existingOrder));
@@ -50,7 +50,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto patchOrder(UUID orderId, OrderPatchDto orderPatchDto) {
-        Order existingOrder = orderRepository.findById(orderId).orElseThrow();
+        Order existingOrder = orderRepository.findById(orderId).orElseThrow(NotFoundException::new);
         orderMapper.patchOrder(orderPatchDto, existingOrder);
         return orderMapper.orderToDto(orderRepository.saveAndFlush(existingOrder));
     }

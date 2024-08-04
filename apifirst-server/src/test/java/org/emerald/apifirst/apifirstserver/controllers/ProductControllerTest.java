@@ -5,6 +5,7 @@ import org.emerald.apifirst.model.DimensionsDto;
 import org.emerald.apifirst.model.ImageDto;
 import org.emerald.apifirst.model.ProductCreateDto;
 import org.emerald.apifirst.model.ProductPatchDto;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
@@ -100,6 +102,22 @@ class ProductControllerTest extends BaseTest {
                 .andExpect(jsonPath("$.description", equalTo("Updated Description")));
     }
 
+    @Transactional
+    @Test
+    void testPatchProductNotFound() throws Exception {
+
+        Product product = productRepository.findAll().iterator().next();
+
+        ProductPatchDto productPatchDto = productMapper.productToPatchDto(product);
+
+        productPatchDto.setDescription("Updated Description");
+
+        mockMvc.perform(patch(ProductController.BASE_URL + "/{productId}", UUID.randomUUID())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(productPatchDto)))
+                .andExpect(status().isNotFound());
+    }
+
     @Test
     void testDeleteProduct() throws Exception {
         ProductCreateDto newProduct = createTestProductCreateDto();
@@ -109,6 +127,29 @@ class ProductControllerTest extends BaseTest {
                 .andExpect(status().isNoContent());
 
         assert productRepository.findById(savedProduct.getId()).isEmpty();
+    }
+
+    @DisplayName("Get by Id Not Found")
+    @Test
+    void testGetProductByIdNotFound() throws Exception {
+
+        mockMvc.perform(get(ProductController.BASE_URL + "/{productId}", UUID.randomUUID())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @DisplayName("Update product by id not found")
+    @Transactional
+    @Test
+    void testUpdateProductNotFound() throws Exception {
+        var product = productRepository.findAll().iterator().next();
+        var productUpdateDto = productMapper.productToUpdateDto(product);
+        productUpdateDto.setDescription("Updated Description");
+
+        mockMvc.perform(put(ProductController.BASE_URL + "/{productId}", UUID.randomUUID())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(productUpdateDto)))
+                .andExpect(status().isNotFound());
     }
 
     private ProductCreateDto createTestProductCreateDto() {

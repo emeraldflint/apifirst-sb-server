@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.UUID;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
@@ -138,6 +139,41 @@ public class CustomerControllerTest extends BaseTest {
                 .andExpect(status().isNoContent());
 
         assert customerRepository.findById(savedCustomer.getId()).isEmpty();
+    }
+
+    @DisplayName("Get by Id Not Found")
+    @Test
+    void testGetCustomerByIdNotFound() throws Exception {
+
+        mockMvc.perform(get(CustomerController.BASE_URL + "/{customerId}", UUID.randomUUID())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Transactional
+    @DisplayName("Test Update Customer Not Found")
+    @Test
+    void testUpdateCustomerNotFound() throws Exception {
+        Customer customer = customerRepository.findAll().iterator().next();
+
+        customer.getName().setFirstName("Updated");
+        customer.getName().setLastName("Updated2");
+        customer.getPaymentMethods().get(0).setDisplayName("NEW NAME");
+
+        mockMvc.perform(put(CustomerController.BASE_URL + "/{customerId}", UUID.randomUUID())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(customerMapper.customerToDto(customer))))
+                .andExpect(status().isNotFound());
+    }
+
+    @DisplayName("Test Delete Conflict With Orders")
+    @Test
+    void testDeleteConflictWithOrders() throws Exception {
+        Customer customer = customerRepository.findAll().iterator().next();
+
+        mockMvc.perform(delete(CustomerController.BASE_URL + "/{customerId}", customer.getId()))
+                .andExpect(status().isConflict());
     }
 
 }
