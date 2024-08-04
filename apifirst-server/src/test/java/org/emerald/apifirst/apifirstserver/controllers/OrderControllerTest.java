@@ -1,7 +1,10 @@
 package org.emerald.apifirst.apifirstserver.controllers;
 
+import org.emerald.apifirst.apifirstserver.domain.Order;
 import org.emerald.apifirst.model.OrderCreateDto;
 import org.emerald.apifirst.model.OrderLineCreateDto;
+import org.emerald.apifirst.model.OrderLinePatchDto;
+import org.emerald.apifirst.model.OrderPatchDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -12,6 +15,7 @@ import java.util.Collections;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -75,5 +79,27 @@ class OrderControllerTest extends BaseTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(testOrder.getId().toString())))
                 .andExpect(jsonPath("$.orderLines[0].orderQuantity", equalTo(222)));
+    }
+
+    @Test
+    @Transactional
+    void testPatchOrder() throws Exception {
+
+        Order order = orderRepository.findAll().get(0);
+
+        OrderPatchDto orderPatch = OrderPatchDto.builder()
+                .orderLines(Collections.singletonList(OrderLinePatchDto.builder()
+                        .id(order.getOrderLines().get(0).getId())
+                        .orderQuantity(333)
+                        .build()))
+                .build();
+
+        mockMvc.perform(patch(OrderController.BASE_URL + "/{orderId}", testOrder.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(orderPatch))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", equalTo(testOrder.getId().toString())))
+                .andExpect(jsonPath("$.orderLines[0].orderQuantity", equalTo(333)));
     }
 }
