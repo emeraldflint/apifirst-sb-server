@@ -127,6 +127,24 @@ class OrderControllerTest extends BaseTest {
                 .andExpect(status().isNotFound());
     }
 
+    @DisplayName("Update order by id not found")
+    @Test
+    @Transactional
+    void testUpdateOrderNotFound() throws Exception {
+
+        var order = orderRepository.findAll().get(0);
+
+        order.getOrderLines().get(0).setOrderQuantity(222);
+
+        var orderUpdate = orderMapper.orderToUpdateDto(order);
+
+        mockMvc.perform(put(OrderController.BASE_URL + "/{orderId}", UUID.randomUUID())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(orderUpdate))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
     private OrderCreateDto createNewOrderDto() {
         return OrderCreateDto.builder()
                 .customerId(testCustomer.getId())
