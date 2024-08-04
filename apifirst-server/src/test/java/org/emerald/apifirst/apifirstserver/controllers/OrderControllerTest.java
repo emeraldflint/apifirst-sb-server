@@ -145,6 +145,27 @@ class OrderControllerTest extends BaseTest {
                 .andExpect(status().isNotFound());
     }
 
+    @DisplayName("Patch order by id not found")
+    @Test
+    @Transactional
+    void testPatchOrderNotFound() throws Exception {
+
+        Order order = orderRepository.findAll().get(0);
+
+        OrderPatchDto orderPatch = OrderPatchDto.builder()
+                .orderLines(Collections.singletonList(OrderLinePatchDto.builder()
+                        .id(order.getOrderLines().get(0).getId())
+                        .orderQuantity(333)
+                        .build()))
+                .build();
+
+        mockMvc.perform(patch(OrderController.BASE_URL + "/{orderId}", UUID.randomUUID())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(orderPatch))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
     private OrderCreateDto createNewOrderDto() {
         return OrderCreateDto.builder()
                 .customerId(testCustomer.getId())
