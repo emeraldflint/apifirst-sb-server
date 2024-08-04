@@ -6,10 +6,12 @@ import org.emerald.apifirst.apifirstserver.mappers.OrderMapper;
 import org.emerald.apifirst.apifirstserver.repositories.OrderRepository;
 import org.emerald.apifirst.model.OrderCreateDto;
 import org.emerald.apifirst.model.OrderDto;
+import org.emerald.apifirst.model.OrderUpdateDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
@@ -21,12 +23,13 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto saveNewOrder(OrderCreateDto orderCreate) {
         Order savedOrder = orderRepository.saveAndFlush(orderMapper.dtoToOrder(orderCreate));
+
         return orderMapper.orderToDto(savedOrder);
     }
 
     @Override
     public List<OrderDto> listOrders() {
-        return orderRepository.findAll().stream()
+        return StreamSupport.stream(orderRepository.findAll().spliterator(), false)
                 .map(orderMapper::orderToDto)
                 .toList();
     }
@@ -34,5 +37,13 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto getOrderById(UUID orderId) {
         return orderMapper.orderToDto(orderRepository.findById(orderId).orElseThrow());
+    }
+
+    @Override
+    public OrderDto updateOrder(UUID orderId, OrderUpdateDto order) {
+        var existingOrder = orderRepository.findById(orderId).orElseThrow();
+        orderMapper.updateOrder(order, existingOrder);
+
+        return orderMapper.orderToDto(orderRepository.save(existingOrder));
     }
 }

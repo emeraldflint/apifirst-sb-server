@@ -64,14 +64,16 @@ public class DataLoader implements CommandLineRunner {
                         .firstName("John")
                         .lastName("Thompson")
                         .build())
-                .billingAddress(address1)
-                .shippingAddress(address1)
+                .billToAddress(address1)
+                .shipToAddress(address1)
                 .email("john@springframework.guru")
                 .phone("800-555-1212")
                 .paymentMethods(List.of(PaymentMethod.builder()
                         .displayName("My Card")
                         .cardNumber(12341234)
                         .expiryMonth(12)
+                        .expiryYear(26)
+                        .cvv(123)
                         .build()))
                 .build();
 
@@ -87,14 +89,16 @@ public class DataLoader implements CommandLineRunner {
                         .firstName("Jim")
                         .lastName("Smith")
                         .build())
-                .billingAddress(address2)
-                .shippingAddress(address2)
+                .billToAddress(address2)
+                .shipToAddress(address2)
                 .email("jim@springframework.guru")
                 .phone("800-555-1212")
                 .paymentMethods(List.of(PaymentMethod.builder()
                         .displayName("My Other Card")
                         .cardNumber(1234888)
                         .expiryMonth(12)
+                        .expiryYear(26)
+                        .cvv(456)
                         .build()))
                 .build();
 
@@ -106,7 +110,7 @@ public class DataLoader implements CommandLineRunner {
                 .categories(Arrays.asList(dryGoods))
                 .cost("12.99")
                 .price("14.99")
-                .dimension(Dimension.builder()
+                .dimensions(Dimension.builder()
                         .height(1)
                         .length(2)
                         .width(3)
@@ -122,7 +126,7 @@ public class DataLoader implements CommandLineRunner {
                 .categories(Arrays.asList(electronics))
                 .cost("12.99")
                 .price("14.99")
-                .dimension(Dimension.builder()
+                .dimensions(Dimension.builder()
                         .height(1)
                         .length(2)
                         .width(3)
@@ -153,6 +157,8 @@ public class DataLoader implements CommandLineRunner {
                                 .build()))
                 .build();
 
+        order1.getOrderLines().forEach(orderLine -> orderLine.setOrder(order1));
+
         Order order2 = Order.builder()
                 .customer(savedCustomer2)
                 .selectedPaymentMethod(savedCustomer2.getPaymentMethods().get(0))
@@ -169,6 +175,8 @@ public class DataLoader implements CommandLineRunner {
                                 .shipQuantity(1)
                                 .build()))
                 .build();
+
+        order2.getOrderLines().forEach(orderLine -> orderLine.setOrder(order2));
 
         orderRepository.save(order1);
         orderRepository.save(order2);

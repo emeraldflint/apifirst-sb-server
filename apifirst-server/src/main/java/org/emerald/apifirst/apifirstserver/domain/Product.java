@@ -1,8 +1,10 @@
 package org.emerald.apifirst.apifirstserver.domain;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -31,7 +33,6 @@ import java.util.UUID;
 @Setter
 @RequiredArgsConstructor
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
 @Entity
 public class Product {
@@ -51,7 +52,7 @@ public class Product {
     @ManyToMany
     private List<Category> categories;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Image> images;
 
     @Pattern(regexp="^-?(?:0|[1-9]\\d{0,2}(?:,?\\d{3})*)(?:\\.\\d+)?$")
@@ -65,4 +66,16 @@ public class Product {
 
     @UpdateTimestamp
     private OffsetDateTime dateUpdated;
+
+    public static class ProductBuilder {
+        public Product build() {
+            Product product = new Product(this.id, this.description, this.dimensions, this.categories, this.images, this.price, this.cost, this.dateCreated, this.dateUpdated);
+
+            if(this.images != null) {
+                this.images.forEach(i -> i.setProduct(product));
+            }
+
+            return product;
+        }
+    }
 }

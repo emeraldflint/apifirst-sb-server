@@ -10,13 +10,14 @@ import org.emerald.apifirst.apifirstserver.repositories.CustomerRepository;
 import org.emerald.apifirst.apifirstserver.repositories.ProductRepository;
 import org.emerald.apifirst.model.OrderCreateDto;
 import org.emerald.apifirst.model.OrderDto;
+import org.emerald.apifirst.model.OrderUpdateDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class OrderMapperDecorator implements OrderMapper{
+public abstract class OrderMapperDecorator implements OrderMapper {
 
     @Autowired
     @Qualifier("delegate")
@@ -30,6 +31,53 @@ public abstract class OrderMapperDecorator implements OrderMapper{
 
     @Autowired
     private PaymentMethodMapper paymentMethodMapper;
+
+    @Override
+    public void updateOrder(OrderUpdateDto orderDto, Order order) {
+        delegate.updateOrder(orderDto, order);
+
+        Customer orderCustomer = customerRepository.findById(orderDto.getCustomerId()).orElseThrow();
+
+        order.setCustomer(orderCustomer);
+
+        PaymentMethod selectedPaymentMethod = order.getCustomer().getPaymentMethods().stream()
+                .filter(pm -> pm.getId().equals(orderDto.getSelectPaymentMethodId()))
+                .findFirst()
+                .orElseThrow();
+
+        order.setSelectedPaymentMethod(selectedPaymentMethod);
+
+        if (orderDto.getOrderLines() != null && !orderDto.getOrderLines().isEmpty()) {
+            orderDto.getOrderLines().forEach(orderLineDto -> {
+                OrderLine existingOrderLine = order.getOrderLines().stream()
+                        .filter(ol -> ol.getId().equals(orderLineDto.getId()))
+                        .findFirst().orElseThrow();
+
+                Product product = productRepository.findById(orderLineDto.getProductId()).orElseThrow();
+
+                existingOrderLine.setProduct(product);
+                existingOrderLine.setOrderQuantity(orderLineDto.getOrderQuantity());
+            });
+        }
+    }
+
+    @Override
+    public OrderUpdateDto orderToUpdateDto(Order order) {
+        OrderUpdateDto orderUpdateDto = delegate.orderToUpdateDto(order);
+
+        orderUpdateDto.setCustomerId(order.getCustomer().getId());
+        orderUpdateDto.setSelectPaymentMethodId(order.getSelectedPaymentMethod().getId());
+
+        orderUpdateDto.getOrderLines().forEach(orderLineDto -> {
+            OrderLine orderLine = order.getOrderLines().stream()
+                    .filter(ol -> ol.getId().equals(orderLineDto.getId()))
+                    .findFirst()
+                    .orElseThrow();
+            orderLineDto.setProductId(orderLine.getProduct().getId());
+        });
+
+        return orderUpdateDto;
+    }
 
     @Override
     public Order dtoToOrder(OrderCreateDto orderCreate) {
@@ -57,7 +105,9 @@ public abstract class OrderMapperDecorator implements OrderMapper{
                             .build());
                 });
 
-        return builder.orderLines(orderLines).build();
+        Order order = builder.orderLines(orderLines).build();
+        orderLines.forEach(orderLine -> orderLine.setOrder(order));
+        return order;
     }
 
     @Override

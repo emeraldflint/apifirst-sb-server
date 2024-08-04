@@ -2,6 +2,7 @@ package org.emerald.apifirst.apifirstserver.services;
 
 import org.emerald.apifirst.model.ProductCreateDto;
 import org.emerald.apifirst.model.ProductDto;
+import org.emerald.apifirst.model.ProductUpdateDto;
 
 import java.util.List;
 import java.util.UUID;
@@ -12,4 +13,6 @@ public interface ProductService {
     ProductDto getProductById(UUID productId);
 
     ProductDto saveNewProduct(ProductCreateDto product);
+
+    ProductDto updateProduct(UUID productId, ProductUpdateDto productUpdateDto);
 }

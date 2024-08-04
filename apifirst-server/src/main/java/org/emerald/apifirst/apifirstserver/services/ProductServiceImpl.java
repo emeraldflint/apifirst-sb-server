@@ -5,6 +5,7 @@ import org.emerald.apifirst.apifirstserver.mappers.ProductMapper;
 import org.emerald.apifirst.apifirstserver.repositories.ProductRepository;
 import org.emerald.apifirst.model.ProductCreateDto;
 import org.emerald.apifirst.model.ProductDto;
+import org.emerald.apifirst.model.ProductUpdateDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,5 +34,13 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto saveNewProduct(ProductCreateDto product) {
         return productMapper.productToDto(productRepository.save(productMapper.dtoToProduct(product)));
+    }
+
+    @Override
+    public ProductDto updateProduct(UUID productId, ProductUpdateDto productUpdateDto) {
+        var product = productRepository.findById(productId).orElseThrow();
+        productMapper.updateProduct(productUpdateDto, product);
+
+        return productMapper.productToDto(productRepository.save(product));
     }
 }

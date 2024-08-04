@@ -36,9 +36,9 @@ class ProductMapperTest {
         assertEquals(productCreateDto.getDescription(), product.getDescription());
         assertEquals(productCreateDto.getCost(), product.getCost());
         assertEquals(productCreateDto.getPrice(), product.getPrice());
-        assertEquals(productCreateDto.getDimensions().getHeight(), product.getDimension().getHeight());
-        assertEquals(productCreateDto.getDimensions().getWidth(), product.getDimension().getWidth());
-        assertEquals(productCreateDto.getDimensions().getLength(), product.getDimension().getLength());
+        assertEquals(productCreateDto.getDimensions().getHeight(), product.getDimensions().getHeight());
+        assertEquals(productCreateDto.getDimensions().getWidth(), product.getDimensions().getWidth());
+        assertEquals(productCreateDto.getDimensions().getLength(), product.getDimensions().getLength());
         assertEquals(productCreateDto.getImages().get(0).getUrl(), product.getImages().get(0).getUrl());
         assertEquals(productCreateDto.getImages().get(0).getAltText(), product.getImages().get(0).getAltText());
         assertEquals(productCreateDto.getCategories().get(0), product.getCategories().get(0).getCategoryCode());
