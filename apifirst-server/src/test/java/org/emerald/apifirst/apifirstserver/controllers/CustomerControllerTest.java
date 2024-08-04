@@ -167,4 +167,13 @@ public class CustomerControllerTest extends BaseTest {
                 .andExpect(status().isNotFound());
     }
 
+    @DisplayName("Test Delete Conflict With Orders")
+    @Test
+    void testDeleteConflictWithOrders() throws Exception {
+        Customer customer = customerRepository.findAll().iterator().next();
+
+        mockMvc.perform(delete(CustomerController.BASE_URL + "/{customerId}", customer.getId()))
+                .andExpect(status().isConflict());
+    }
+
 }
