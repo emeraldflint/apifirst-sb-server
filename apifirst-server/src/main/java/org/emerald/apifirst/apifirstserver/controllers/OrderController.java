@@ -35,7 +35,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<Void> saveNewOrder(@RequestBody OrderCreateDto orderCreate){
+    public ResponseEntity<Void> saveNewOrder(@RequestBody OrderCreateDto orderCreate) {
         OrderDto savedOrder = orderService.saveNewOrder(orderCreate);
 
         UriComponents uriComponents = UriComponentsBuilder.fromPath(BASE_URL + "/{orderId}")
@@ -45,7 +45,7 @@ public class OrderController {
     }
 
     @GetMapping
-    public ResponseEntity<List<OrderDto>> listOrders(){
+    public ResponseEntity<List<OrderDto>> listOrders() {
         return ResponseEntity.ok(orderService.listOrders());
     }
 
@@ -62,7 +62,7 @@ public class OrderController {
 
     @PatchMapping("/{orderId}")
     public ResponseEntity<OrderDto> patchOrder(@PathVariable("orderId") UUID orderId,
-                                               @RequestBody OrderPatchDto orderPatchDto){
+                                               @RequestBody OrderPatchDto orderPatchDto) {
         OrderDto savedOrder = orderService.patchOrder(orderId, orderPatchDto);
         return ResponseEntity.ok(savedOrder);
     }
