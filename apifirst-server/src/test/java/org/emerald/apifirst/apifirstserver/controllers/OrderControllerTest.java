@@ -5,12 +5,14 @@ import org.emerald.apifirst.model.OrderCreateDto;
 import org.emerald.apifirst.model.OrderLineCreateDto;
 import org.emerald.apifirst.model.OrderLinePatchDto;
 import org.emerald.apifirst.model.OrderPatchDto;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.UUID;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
@@ -114,6 +116,15 @@ class OrderControllerTest extends BaseTest {
                 .andExpect(status().isNoContent());
 
         assert orderRepository.findById(savedOrder.getId()).isEmpty();
+    }
+
+    @DisplayName("Get by Id Not Found")
+    @Test
+    void testGetOrderByIdNotFound() throws Exception {
+
+        mockMvc.perform(get(OrderController.BASE_URL + "/{orderId}", UUID.randomUUID())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 
     private OrderCreateDto createNewOrderDto() {

@@ -5,6 +5,7 @@ import org.emerald.apifirst.model.DimensionsDto;
 import org.emerald.apifirst.model.ImageDto;
 import org.emerald.apifirst.model.ProductCreateDto;
 import org.emerald.apifirst.model.ProductPatchDto;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
@@ -109,6 +111,15 @@ class ProductControllerTest extends BaseTest {
                 .andExpect(status().isNoContent());
 
         assert productRepository.findById(savedProduct.getId()).isEmpty();
+    }
+
+    @DisplayName("Get by Id Not Found")
+    @Test
+    void testGetProductByIdNotFound() throws Exception {
+
+        mockMvc.perform(get(ProductController.BASE_URL + "/{productId}", UUID.randomUUID())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 
     private ProductCreateDto createTestProductCreateDto() {
