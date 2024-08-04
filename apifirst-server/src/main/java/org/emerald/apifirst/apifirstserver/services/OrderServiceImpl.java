@@ -6,6 +6,7 @@ import org.emerald.apifirst.apifirstserver.mappers.OrderMapper;
 import org.emerald.apifirst.apifirstserver.repositories.OrderRepository;
 import org.emerald.apifirst.model.OrderCreateDto;
 import org.emerald.apifirst.model.OrderDto;
+import org.emerald.apifirst.model.OrderUpdateDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,5 +37,13 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto getOrderById(UUID orderId) {
         return orderMapper.orderToDto(orderRepository.findById(orderId).orElseThrow());
+    }
+
+    @Override
+    public OrderDto updateOrder(UUID orderId, OrderUpdateDto order) {
+        var existingOrder = orderRepository.findById(orderId).orElseThrow();
+        orderMapper.updateOrder(order, existingOrder);
+
+        return orderMapper.orderToDto(orderRepository.save(existingOrder));
     }
 }

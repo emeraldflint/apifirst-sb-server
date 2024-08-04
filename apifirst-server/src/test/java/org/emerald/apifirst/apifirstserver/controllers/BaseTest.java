@@ -5,6 +5,7 @@ import org.emerald.apifirst.apifirstserver.domain.Customer;
 import org.emerald.apifirst.apifirstserver.domain.Order;
 import org.emerald.apifirst.apifirstserver.domain.Product;
 import org.emerald.apifirst.apifirstserver.mappers.CustomerMapper;
+import org.emerald.apifirst.apifirstserver.mappers.OrderMapper;
 import org.emerald.apifirst.apifirstserver.mappers.ProductMapper;
 import org.emerald.apifirst.apifirstserver.repositories.CustomerRepository;
 import org.emerald.apifirst.apifirstserver.repositories.OrderRepository;
@@ -37,6 +38,9 @@ public class BaseTest {
 
     @Autowired
     CustomerMapper customerMapper;
+
+    @Autowired
+    OrderMapper orderMapper;
 
     public MockMvc mockMvc;
 
