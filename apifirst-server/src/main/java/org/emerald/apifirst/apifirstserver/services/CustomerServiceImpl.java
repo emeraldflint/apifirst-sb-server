@@ -38,4 +38,13 @@ public class CustomerServiceImpl implements CustomerService {
         customerRepository.flush();
         return customerMapper.customerToDto(savedCustomer);
     }
+
+    @Transactional
+    @Override
+    public CustomerDto updateCustomer(UUID customerId, CustomerDto customer) {
+        Customer existingCustomer = customerRepository.findById(customerId).orElseThrow();
+        customerMapper.updateCustomer(customer, existingCustomer);
+
+        return customerMapper.customerToDto(customerRepository.save(existingCustomer));
+    }
 }
