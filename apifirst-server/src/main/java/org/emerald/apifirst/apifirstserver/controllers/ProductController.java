@@ -7,6 +7,7 @@ import org.emerald.apifirst.model.ProductDto;
 import org.emerald.apifirst.model.ProductPatchDto;
 import org.emerald.apifirst.model.ProductUpdateDto;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -61,5 +62,11 @@ public class ProductController {
                                                    @RequestBody ProductPatchDto product){
         ProductDto savedProduct = productService.patchProduct(productId, product);
         return ResponseEntity.ok(savedProduct);
+    }
+
+    @DeleteMapping("/{productId}")
+    ResponseEntity<Void> deleteProduct(@PathVariable("productId") UUID productId) {
+        productService.deleteProduct(productId);
+        return ResponseEntity.noContent().build();
     }
 }

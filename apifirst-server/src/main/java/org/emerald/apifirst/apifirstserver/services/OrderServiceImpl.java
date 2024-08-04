@@ -54,4 +54,11 @@ public class OrderServiceImpl implements OrderService {
         orderMapper.patchOrder(orderPatchDto, existingOrder);
         return orderMapper.orderToDto(orderRepository.saveAndFlush(existingOrder));
     }
+
+    @Override
+    public void deleteProduct(UUID orderId) {
+        orderRepository.findById(orderId).ifPresentOrElse(orderRepository::delete, () -> {
+            throw new NotFoundException("Oder not found");
+        });
+    }
 }

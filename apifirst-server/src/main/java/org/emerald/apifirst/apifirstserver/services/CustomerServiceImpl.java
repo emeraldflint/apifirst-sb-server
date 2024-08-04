@@ -58,4 +58,12 @@ public class CustomerServiceImpl implements CustomerService {
 
         return customerMapper.customerToDto(customerRepository.saveAndFlush(existingCustomer));
     }
+
+    @Transactional
+    @Override
+    public void deleteCustomer(UUID customerId) {
+        customerRepository.findById(customerId).ifPresentOrElse(customerRepository::delete, () -> {
+            throw new NotFoundException("Customer not found");
+        });
+    }
 }

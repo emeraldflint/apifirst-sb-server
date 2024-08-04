@@ -18,4 +18,6 @@ public interface OrderService {
     OrderDto updateOrder(UUID orderId, OrderUpdateDto order);
 
     OrderDto patchOrder(UUID orderId, OrderPatchDto orderPatchDto);
+
+    void deleteProduct(UUID orderId);
 }
