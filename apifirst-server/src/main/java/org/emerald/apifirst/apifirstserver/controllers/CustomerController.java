@@ -5,6 +5,7 @@ import org.emerald.apifirst.apifirstserver.services.CustomerService;
 import org.emerald.apifirst.model.CustomerDto;
 import org.emerald.apifirst.model.CustomerPatchDto;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,22 +41,28 @@ public class CustomerController {
     }
 
     @PostMapping
-    ResponseEntity<Void> saveNewCustomer(@RequestBody CustomerDto customer){
+    ResponseEntity<Void> saveNewCustomer(@RequestBody CustomerDto customer) {
         var savedCustomer = customerService.saveNewCustomer(customer);
         return ResponseEntity.created(URI.create(BASE_URL + "/" + savedCustomer.getId())).build();
     }
 
     @PutMapping("/{customerId}")
     ResponseEntity<CustomerDto> updateCustomer(@PathVariable("customerId") UUID customerId,
-                                               @RequestBody CustomerDto customer){
+                                               @RequestBody CustomerDto customer) {
         CustomerDto savedCustomer = customerService.updateCustomer(customerId, customer);
         return ResponseEntity.ok(savedCustomer);
     }
 
     @PatchMapping("/{customerId}")
     ResponseEntity<CustomerDto> patchCustomer(@PathVariable("customerId") UUID customerId,
-                                              @RequestBody CustomerPatchDto customer){
+                                              @RequestBody CustomerPatchDto customer) {
         CustomerDto savedCustomer = customerService.patchCustomer(customerId, customer);
         return ResponseEntity.ok(savedCustomer);
+    }
+
+    @DeleteMapping("/{customerId}")
+    ResponseEntity<Void> deleteCustomer(@PathVariable("customerId") UUID customerId) {
+        customerService.deleteCustomer(customerId);
+        return ResponseEntity.noContent().build();
     }
 }
