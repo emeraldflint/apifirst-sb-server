@@ -1,8 +1,10 @@
 package org.emerald.apifirst.apifirstserver.controllers;
 
+import org.emerald.apifirst.apifirstserver.domain.Product;
 import org.emerald.apifirst.model.DimensionsDto;
 import org.emerald.apifirst.model.ImageDto;
 import org.emerald.apifirst.model.ProductCreateDto;
+import org.emerald.apifirst.model.ProductPatchDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -14,6 +16,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -75,6 +78,23 @@ class ProductControllerTest extends BaseTest {
         mockMvc.perform(put(ProductController.BASE_URL + "/{productId}", product.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(productUpdateDto)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.description", equalTo("Updated Description")));
+    }
+
+    @Transactional
+    @Test
+    void testPatchProduct() throws Exception {
+
+        Product product = productRepository.findAll().iterator().next();
+
+        ProductPatchDto productPatchDto = productMapper.productToPatchDto(product);
+
+        productPatchDto.setDescription("Updated Description");
+
+        mockMvc.perform(patch(ProductController.BASE_URL + "/{productId}", product.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(productPatchDto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.description", equalTo("Updated Description")));
     }
