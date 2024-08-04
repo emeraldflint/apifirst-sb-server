@@ -7,6 +7,7 @@ import org.emerald.apifirst.model.OrderDto;
 import org.emerald.apifirst.model.OrderPatchDto;
 import org.emerald.apifirst.model.OrderUpdateDto;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -64,5 +65,11 @@ public class OrderController {
                                                @RequestBody OrderPatchDto orderPatchDto){
         OrderDto savedOrder = orderService.patchOrder(orderId, orderPatchDto);
         return ResponseEntity.ok(savedOrder);
+    }
+
+    @DeleteMapping("/{orderId}")
+    ResponseEntity<Void> deleteOrder(@PathVariable("orderId") UUID orderId) {
+        orderService.deleteProduct(orderId);
+        return ResponseEntity.noContent().build();
     }
 }

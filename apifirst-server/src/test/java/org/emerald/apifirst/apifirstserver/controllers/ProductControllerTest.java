@@ -15,6 +15,7 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -97,5 +98,34 @@ class ProductControllerTest extends BaseTest {
                         .content(objectMapper.writeValueAsString(productPatchDto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.description", equalTo("Updated Description")));
+    }
+
+    @Test
+    void testDeleteProduct() throws Exception {
+        ProductCreateDto newProduct = createTestProductCreateDto();
+        Product savedProduct = productRepository.save(productMapper.dtoToProduct(newProduct));
+
+        mockMvc.perform(delete(ProductController.BASE_URL + "/{productId}", savedProduct.getId()))
+                .andExpect(status().isNoContent());
+
+        assert productRepository.findById(savedProduct.getId()).isEmpty();
+    }
+
+    private ProductCreateDto createTestProductCreateDto() {
+        return ProductCreateDto.builder()
+                .description("New Product")
+                .cost("5.00")
+                .price("8.95")
+                .categories(List.of("ELECTRONICS"))
+                .images(Collections.singletonList(ImageDto.builder()
+                        .url("http://example.com/image.jpg")
+                        .altText("Image Alt Text")
+                        .build()))
+                .dimensions(DimensionsDto.builder()
+                        .length(10)
+                        .width(10)
+                        .height(10)
+                        .build())
+                .build();
     }
 }

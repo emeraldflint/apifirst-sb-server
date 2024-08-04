@@ -52,4 +52,9 @@ public class ProductServiceImpl implements ProductService {
         productMapper.patchProduct(product, existingProduct);
         return productMapper.productToDto(productRepository.save(existingProduct));
     }
+
+    @Override
+    public void deleteProduct(UUID productId) {
+        productRepository.deleteById(productId);
+    }
 }

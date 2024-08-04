@@ -14,6 +14,7 @@ import java.util.Collections;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -101,5 +102,28 @@ class OrderControllerTest extends BaseTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", equalTo(testOrder.getId().toString())))
                 .andExpect(jsonPath("$.orderLines[0].orderQuantity", equalTo(333)));
+    }
+
+    @Transactional
+    @Test
+    void testDeleteOrder() throws Exception {
+        OrderCreateDto dto = createNewOrderDto();
+        Order savedOrder = orderRepository.save(orderMapper.dtoToOrder(dto));
+
+        mockMvc.perform(delete(OrderController.BASE_URL + "/{orderId}", savedOrder.getId()))
+                .andExpect(status().isNoContent());
+
+        assert orderRepository.findById(savedOrder.getId()).isEmpty();
+    }
+
+    private OrderCreateDto createNewOrderDto() {
+        return OrderCreateDto.builder()
+                .customerId(testCustomer.getId())
+                .selectPaymentMethodId(testCustomer.getPaymentMethods().get(0).getId())
+                .orderLines(Collections.singletonList(OrderLineCreateDto.builder()
+                        .productId(testProduct.getId())
+                        .orderQuantity(1)
+                        .build()))
+                .build();
     }
 }

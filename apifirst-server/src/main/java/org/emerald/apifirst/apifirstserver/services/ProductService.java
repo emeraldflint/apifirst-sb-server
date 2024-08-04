@@ -18,4 +18,6 @@ public interface ProductService {
     ProductDto updateProduct(UUID productId, ProductUpdateDto productUpdateDto);
 
     ProductDto patchProduct(UUID productId, ProductPatchDto product);
+
+    void deleteProduct(UUID productId);
 }
