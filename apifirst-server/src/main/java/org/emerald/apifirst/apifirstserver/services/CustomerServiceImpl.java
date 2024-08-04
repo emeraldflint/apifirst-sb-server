@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.emerald.apifirst.apifirstserver.domain.Customer;
 import org.emerald.apifirst.apifirstserver.mappers.CustomerMapper;
 import org.emerald.apifirst.apifirstserver.repositories.CustomerRepository;
+import org.emerald.apifirst.apifirstserver.repositories.OrderRepository;
 import org.emerald.apifirst.model.CustomerDto;
 import org.emerald.apifirst.model.CustomerPatchDto;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
     private final CustomerMapper customerMapper;
+    private final OrderRepository orderRepository;
 
     @Override
     public List<CustomerDto> listCustomers() {
@@ -62,7 +64,13 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional
     @Override
     public void deleteCustomer(UUID customerId) {
-        customerRepository.findById(customerId).ifPresentOrElse(customerRepository::delete, () -> {
+        customerRepository.findById(customerId).ifPresentOrElse(customer ->
+        {
+            if (!orderRepository.findAllByCustomer(customer).isEmpty()) {
+                throw new ConflictException("Customer has orders");
+            }
+            customerRepository.delete(customer);
+        }, () -> {
             throw new NotFoundException("Customer not found");
         });
     }
